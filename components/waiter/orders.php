@@ -1,6 +1,6 @@
-<h1 class="content__title">Админ-панель</h1>
+<h1 class="content__title">Панель официанта</h1>
 <div class="table__outer">
-  <button class="table__button" id="add-worker-button">
+  <button class="table__button" id="create-order-button">
     <svg
       class="table__add-icon"
       width="30"
@@ -31,32 +31,27 @@
   </button>
   <table class="table">
     <caption class="table__heading">
-      <h2 class="secondary-heading">Работники</h2>
+      <h2 class="secondary-heading">Заказы за смену</h2>
     </caption>
     <thead class="table__head">
       <tr class="table__row">
-        <th class="table__cell table__cell--head">ФИО</th>
-        <th class="table__cell table__cell--head">Должность</th>
-        <th class="table__cell table__cell--head">Фото</th>
+        <th class="table__cell table__cell--head">Позиции</th>
+        <th class="table__cell table__cell--head">Время создания</th>
         <th class="table__cell table__cell--head">Статус</th>
       </tr>
     </thead>
     <tbody class="table__body">
       <tr class="table__row">
+        <td class="table__cell table-cell--dynamic">Гречка с мясом, суп с овощами</td>
         <td class="table__cell table__cell--static">
-          Виноградов Кирилл Сергеевич
+          18:24
         </td>
-        <td class="table__cell table__cell--static">Повар</td>
-        <td class="table__cell table__cell--static">
-          <div class="photo__wrapper photo__wrapper--small">
-            <img
-              class="photo"
-              src="assets/images/images.jpg"
-              alt="Фото работника"
-            />
-          </div>
-        </td>
-        <td class="table__cell table__cell--static">Работает</td>
+        <td class="table__cell table__cell--static">Оплачен</td>
+      </tr>
+      <tr class="table__row">
+        <td class="table__cell table-cell--dynamic">Бисквитный торт, шоколадный десерт</td>
+        <td class="table__cell table__cell--static">20:24</td>
+        <td class="table__cell table__cell--static">Принят</td>
       </tr>
     </tbody>
   </table>

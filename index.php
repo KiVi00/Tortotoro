@@ -14,7 +14,7 @@ $title = "Tortotoro";
   <body>
     <main class="content">
       <div class="content__inner container">
-        <?php require_once 'components/forms/authorization-form/authorization-form.php' ?>
+        <?php require_once 'components/authorization-form/authorization-form.php' ?>
       </div>
     </main>
   </body>

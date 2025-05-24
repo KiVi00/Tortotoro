@@ -1,5 +1,5 @@
 <?php
-$title = "Tortotoro: Админ-панель";
+$title = "Tortotoro: Официант";
 ?>
 
 <!DOCTYPE html>
@@ -12,7 +12,7 @@ $title = "Tortotoro: Админ-панель";
   </head>
 
   <body class="page">
-    <?php require $_SERVER['DOCUMENT_ROOT'].'/Tortotoro/components/admin/admin-header.php' ?>
+    <?php require $_SERVER['DOCUMENT_ROOT'].'/Tortotoro/components/header/header.php' ?>
     <main class="content">
       <div class="content__loading" id="loading-box"></div>
       <div
@@ -24,6 +24,6 @@ $title = "Tortotoro: Админ-панель";
         id="component-box"
       ></div>
     </main>
-    <script src="components/admin/ajax-admin-buttons.js"></script>
+    <script src="components/admin/ajax-buttons.js"></script>
   </body>
 </html>

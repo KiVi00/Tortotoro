@@ -20,6 +20,7 @@
     --secondary-text-color: hsl(332, 37%, 86%);
     --primary-text-color: hsl(0, 100%, 100%, 100%);
     --border-input-color: hsl(341, 20%, 25%);
+    --placeholder-text-color: hsl(332, 0%, 80%, 60%);
 }
 
 html {
@@ -71,9 +72,10 @@ body {
 }
 
 .content__loading {
-    color: hsl(0, 100%, 100%, 50%);
-    position: absolute;
+    color: hsl(0, 0%, 100%);
     top: 80px;
+    position: absolute;
+    z-index: 999;
 }
 
 .container {
@@ -82,11 +84,20 @@ body {
 }
 
 .content__modal {
-    display: flex;
-    position: absolute;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
+    position: fixed;
+    transition:
+        opacity 200ms ease 0s,
+        visibility linear 200ms;
+    opacity: 0;
+    visibility: hidden;
+    z-index: 100;
+}
+
+.content__modal--active {
+    opacity: 1;
+    visibility: visible;
+    transition:
+        opacity 200ms ease;
 }
 
 .secondary-heading {
@@ -100,20 +111,31 @@ body {
 .form {
     display: flex;
     flex-direction: column;
-    justify-content: center;
     align-items: center;
     gap: 25px;
-    height: fit-content;
     max-width: 800px;
     width: 100%;
-    padding: 25px 224px;
+    padding: 40px 60px;
     border-radius: 8px;
     background-color: var(--secondary-background-color);
 }
 
 .form--modal {
-    z-index: 200;
+    z-index: 300;
     position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.form--authorization {
+    padding: 40px 224px;
+}
+
+.form__columns-wrapper {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
 }
 
 .form__outer {
@@ -122,32 +144,120 @@ body {
     background: rgba(0, 0, 0, 0.4);
     justify-content: center;
     align-items: center;
-    z-index: 100;
+    z-index: 200;
 }
 
-/* .form__heading {
-} */
+.form__textarea {
+    resize: none;
+    width: 100%;
+    background-color: var(--primary-background-color);
+    border-radius: 8px;
+    border: 1px solid var(--border-input-color);
+    padding: 10px;
+    color: var(--primary-text-color);
+    transition: border-color ease 200ms;
+    outline: 0;
+    min-width: 250px;
+    max-width: 400px;
+    height: 100px;
+}
+
+.form__textarea:disabled {
+    background-color: var(--lighter-backgound-color);
+}
+
+.form__textarea::placeholder {
+    color: var(--placeholder-text-color);
+}
+
+.form__textarea:focus {
+    border-width: 2px;
+    border-color: var(--accent-color);
+    outline: 0;
+    box-shadow: none;
+}
+
+.form__heading {}
+
+.form__select {}
+
+select {
+    height: 45px;
+    width: 100%;
+    max-width: 400px;
+    min-width: 250px;
+    border-radius: 8px;
+    background-color: var(--primary-background-color);
+    color: var(--primary-text-color);
+    border: 1px solid var(--border-input-color);
+    padding: 10px;
+    outline: 0;
+    appearance: none;
+}
+
+.select__wrapper {
+    position: relative;
+    display: inline block;
+}
+
+.select__arrow-icon {
+    position: absolute;
+    color: var(--primary-text-color);
+    top: 50%;
+    transform: translate(-50%, -50%);
+    right: 20px;
+}
+
+.form__select:focus {
+    border-width: 2px;
+    border-color: var(--accent-color);
+    outline: 0;
+    box-shadow: none;
+}
 
 .form__input-group {
     display: flex;
+    width: 60%;
     flex-direction: column;
-    gap: 15px;
+    justify-content: center;
+    align-items: center;
+    margin-right: 15px;
+    gap: 36px;
+}
+
+.form__text-inputs-wrapper {
+    display: flex;
+    flex-direction: column;
+    row-gap: 10px;
+    width: 100%;
+}
+
+.form__photo-group {
+    display: flex;
+    flex-direction: column;
+    row-gap: 36px;
+    align-items: center;
+    justify-content: center;
 }
 
 .form__input-wrapper {
     display: flex;
     flex-direction: column;
-    gap: 5px;
+    width: 100%;
+    gap: 2px;
 }
 
 .form__input-label {
     color: var(--secondary-text-color);
     font-weight: 600;
+    cursor: default;
 }
 
 .form__text-input {
+    min-width: 250px;
+    max-width: 400px;
+    width: 100%;
     height: 45px;
-    width: 300px;
     background-color: var(--primary-background-color);
     border-radius: 8px;
     border: 1px solid var(--border-input-color);
@@ -156,12 +266,15 @@ body {
     transition: border-color ease 200ms;
 }
 
-
 .form__text-input:focus {
     border-width: 2px;
     border-color: var(--accent-color);
     outline: 0;
     box-shadow: none;
+}
+
+.form__text-input::placeholder {
+    color: var(--placeholder-text-color);
 }
 
 .form__button {
@@ -175,6 +288,7 @@ body {
     border-radius: 8px;
     padding: 10px 25px;
     transition: background-color ease 200ms;
+    white-space: nowrap;
 }
 
 .form__button:hover {
@@ -182,7 +296,25 @@ body {
 }
 
 .form__button:focus-visible {
-    outline: 5px solid rgb(255, 255, 255);
+    outline: 5px dotted var(--primary-text-color);
+}
+
+.photo {
+    width: 100%;
+    height: 100%;
+    border-radius: 8px;
+    object-fit: cover;
+    border: 2px solid var(--secondary-text-color);
+}
+
+.photo__wrapper {
+    width: 100%;
+    aspect-ratio: 4/4;
+    max-width: 250px;
+}
+
+.photo__wrapper--small {
+    max-width: 100px;
 }
 
 .header {
@@ -214,6 +346,7 @@ body {
     font-weight: 700;
     background-color: var(--darker-background-color);
     border: none;
+    transition: background-color ease 200ms;
 }
 
 .header__button:hover {
@@ -226,6 +359,7 @@ body {
     align-items: center;
     width: fit-content;
     padding-inline: 10px;
+    transition: background-color ease 200ms;
 }
 
 .header__logo:hover {
@@ -233,7 +367,7 @@ body {
 }
 
 .logo__svg {
-    color: #D2A7BA;
+    color: var(--logo-primary-color);
     height: 95%;
     width: auto;
 }
@@ -257,16 +391,14 @@ body {
     border-top: solid var(--logo-primary-color) 2px;
     padding: 15px 20px;
     text-align: center;
+    width: min-content;
 }
 
 .table__cell--static {
-    width: min-content;
-    white-space: nowrap;
 }
 
-.table-cell--workers {
+.table-cell--dynamic {
     text-align: left;
-    width: 50%;
 }
 
 .table__cell:first-child {
@@ -302,10 +434,17 @@ body {
     color: var(--logo-secondary-color)
 }
 
-.table__button--first {
+.table__button {
     left: 5px
 }
 
-.table__button--second {
-    left: 45px
+.cross-icon {
+    color: var(--logo-secondary-color);
+    font-weight: 700;
+    transition: color ease 200ms;
+    cursor: pointer;
+}
+
+.cross-icon:hover {
+    color: var(--logo-primary-color);
 }

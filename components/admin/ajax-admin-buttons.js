@@ -1,5 +1,4 @@
 "use strict";
-
 async function loadComponent(url, containerId = "component-box") {
   try {
     document.getElementById("loading-box").innerHTML = "Загрузка...";
@@ -20,6 +19,10 @@ async function loadComponent(url, containerId = "component-box") {
   }
 }
 
+document.addEventListener("DOMContentLoaded", () =>
+  loadComponent("components/admin/shifts.php")
+);
+
 document
   .getElementById("workers")
   .addEventListener("click", () =>
@@ -38,7 +41,7 @@ function initDynamicHandlers() {
     .addEventListener("click", async (e) => {
       const target = e.target;
 
-      if (target.closest("#add-button")) {
+      if (target.closest("#add-worker-button")) {
         try {
           document.getElementById("loading-box").innerHTML = "Загрузка...";
           const response = await fetch(
@@ -56,23 +59,67 @@ function initDynamicHandlers() {
 
           const html = await response.text();
 
+          document.getElementById("modal-window-content").innerHTML = html;
           document.getElementById("loading-box").innerHTML = "";
-          document.getElementById("registration-form").innerHTML = html;
-
           document.body.style.overflowY = "hidden";
+
+          document
+            .getElementById("modal-window-content")
+            .classList.add("content__modal--active");
 
           document
             .getElementById("form-outer")
             .addEventListener("click", () => {
-              document.getElementById("registration-form").innerHTML = "";
+              document
+                .querySelector(".content__modal")
+                .classList.remove("content__modal--active");
               document.body.style.overflowY = "scroll";
+              setTimeout(() => {
+                document.getElementById("modal-window-content").innerHTML = "";
+              }, 200);
             });
         } catch (error) {
           console.error("Ошибка загрузки:", error);
         }
       }
 
-      if (target.closest("#settings-button")) {
+      if (target.closest("#add-shift-button")) {
+        try {
+          document.getElementById("loading-box").innerHTML = "Загрузка...";
+          const response = await fetch("components/admin/add-shift-form.php", {
+            method: "GET",
+            headers: {
+              "Content-Type": "text/html",
+            },
+          });
+
+          if (!response.ok)
+            throw new Error(`HTTP error! status: ${response.status}`);
+
+          const html = await response.text();
+
+          document.getElementById("modal-window-content").innerHTML = html;
+          document.getElementById("loading-box").innerHTML = "";
+          document.body.style.overflowY = "hidden";
+
+          document
+            .getElementById("modal-window-content")
+            .classList.add("content__modal--active");
+
+          document
+            .getElementById("form-outer")
+            .addEventListener("click", () => {
+              document
+                .querySelector(".content__modal")
+                .classList.remove("content__modal--active");
+              document.body.style.overflowY = "scroll";
+              setTimeout(() => {
+                document.getElementById("modal-window-content").innerHTML = "";
+              }, 200);
+            });
+        } catch (error) {
+          console.error("Ошибка загрузки:", error);
+        }
       }
     });
 }
