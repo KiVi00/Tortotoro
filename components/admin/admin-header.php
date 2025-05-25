@@ -71,7 +71,7 @@
     <nav class="header__nav" aria-label="Основная навигация">
       <ul class="header__list">
         <li class="header__list-item">
-          <button class="header__button" id="shifts">Смены</button>
+          <button class="header__button header__button--current" id="shifts">Смены</button>
         </li>
         <li class="header__list-item">
           <button class="header__button" id="workers">Работники</button>

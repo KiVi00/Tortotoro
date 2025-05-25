@@ -12,7 +12,7 @@ $title = "Tortotoro: Официант";
   </head>
 
   <body class="page">
-    <?php require $_SERVER['DOCUMENT_ROOT'].'/Tortotoro/components/header/header.php' ?>
+    <?php require $_SERVER['DOCUMENT_ROOT'].'/Tortotoro/components/cooker/cooker-header.php' ?>
     <main class="content">
       <div class="content__loading" id="loading-box"></div>
       <div
@@ -24,6 +24,6 @@ $title = "Tortotoro: Официант";
         id="component-box"
       ></div>
     </main>
-    <script src="components/admin/ajax-buttons.js"></script>
+    <script src="components/cooker/ajax-cooker-buttons.js"></script>
   </body>
 </html>

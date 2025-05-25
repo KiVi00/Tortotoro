@@ -71,7 +71,7 @@
     <nav class="header__nav" aria-label="Основная навигация">
       <ul class="header__list">
         <li class="header__list-item">
-          <button class="header__button" id="orders">Заказы</button>
+          <button class="header__button header__button--current" id="orders">Заказы</button>
         </li>
       </ul>
     </nav>

@@ -36,6 +36,7 @@
             <option class="select__option" value="default">Выберите роль</option>
             <option class="select__option" value="cooker">Повар</option>
             <option class="select__option" value="waiter">Официант</option>
+            <option class="select__option" value="admin">Администратор</option>
           </select>
         </div>
       </div>

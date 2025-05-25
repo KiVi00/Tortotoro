@@ -1,17 +1,7 @@
 <div class="form__outer" id="form-outer"></div>
 <form class="form form--modal form--two-columns" action="registration-form.php" method="post">
-  <h1 class="form__heading secondary-heading">Добавление смены</h1>
+  <h1 class="form__heading secondary-heading">Изменение смены</h1>
   <div class="form__input-group">
-    <div class="form__text-inputs-wrapper">
-      <div class="form__input-wrapper">
-        <label class="form__input-label" for="shift-start">Начало смены</label>
-        <input class="form__text-input" type="text" id="shift-start" placeholder="ГГ.ММ.ДД ЧЧ:ММ">
-      </div>
-      <div class="form__input-wrapper">
-        <label class="form__input-label" for="shift-end">Конец смены</label>
-        <input class="form__text-input" type="text" id="shift-end" placeholder="ГГ.ММ.ДД ЧЧ:ММ">
-      </div>
-    </div>
     <div class="form__input-wrapper">
       <div class="select__wrapper">
         <svg class="select__arrow-icon" width="14" height="11" viewBox="0 0 14 11" fill="none"
@@ -29,6 +19,6 @@
     <div class="form__input-wrapper">
       <textarea class="form__textarea" name="current-shift-workers" id="current-shift-workers" placeholder="Сотрудники"></textarea>
     </div>
-    <button class="form__button">Добавить смену</button>
+    <button class="form__button">Сохранить</button>
   </div>
 </form>

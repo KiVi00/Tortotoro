@@ -75,5 +75,87 @@ function initDynamicHandlers() {
           console.error("Ошибка загрузки:", error);
         }
       }
+      if (target.closest(".table__row--interactive")) {
+        try {
+          document.getElementById("loading-box").innerHTML = "Загрузка...";
+          const response = await fetch(
+            "components/waiter/view-order-form.php",
+            {
+              method: "GET",
+              headers: {
+                "Content-Type": "text/html",
+              },
+            }
+          );
+
+          if (!response.ok)
+            throw new Error(`HTTP error! status: ${response.status}`);
+
+          const html = await response.text();
+
+          document.getElementById("modal-window-content").innerHTML = html;
+          document.getElementById("loading-box").innerHTML = "";
+          document.body.style.overflowY = "hidden";
+
+          document
+            .getElementById("modal-window-content")
+            .classList.add("content__modal--active");
+
+          document
+            .getElementById("form-outer")
+            .addEventListener("click", () => {
+              document
+                .querySelector(".content__modal")
+                .classList.remove("content__modal--active");
+              document.body.style.overflowY = "scroll";
+              setTimeout(() => {
+                document.getElementById("modal-window-content").innerHTML = "";
+              }, 200);
+            });
+        } catch (error) {
+          console.error("Ошибка загрузки:", error);
+        }
+      }
+      if (target.closest("#order-status-n")) {
+        try {
+          document.getElementById("loading-box").innerHTML = "Загрузка...";
+          const response = await fetch(
+            "components/waiter/change-order-status.php",
+            {
+              method: "GET",
+              headers: {
+                "Content-Type": "text/html",
+              },
+            }
+          );
+
+          if (!response.ok)
+            throw new Error(`HTTP error! status: ${response.status}`);
+
+          const html = await response.text();
+
+          document.getElementById("modal-window-content").innerHTML = html;
+          document.getElementById("loading-box").innerHTML = "";
+          document.body.style.overflowY = "hidden";
+
+          document
+            .getElementById("modal-window-content")
+            .classList.add("content__modal--active");
+
+          document
+            .getElementById("form-outer")
+            .addEventListener("click", () => {
+              document
+                .querySelector(".content__modal")
+                .classList.remove("content__modal--active");
+              document.body.style.overflowY = "scroll";
+              setTimeout(() => {
+                document.getElementById("modal-window-content").innerHTML = "";
+              }, 200);
+            });
+        } catch (error) {
+          console.error("Ошибка загрузки:", error);
+        }
+      }
     });
 }

@@ -34,7 +34,7 @@
       <h2 class="secondary-heading">Работники</h2>
     </caption>
     <thead class="table__head">
-      <tr class="table__row">
+      <tr class="table__row" id="worker-1">
         <th class="table__cell table__cell--head">ФИО</th>
         <th class="table__cell table__cell--head">Должность</th>
         <th class="table__cell table__cell--head">Фото</th>
@@ -42,12 +42,12 @@
       </tr>
     </thead>
     <tbody class="table__body">
-      <tr class="table__row">
-        <td class="table__cell table__cell--static">
+      <tr class="table__row table__row--interactive" id="view-shifts">
+        <td class="table__cell">
           Виноградов Кирилл Сергеевич
         </td>
-        <td class="table__cell table__cell--static">Повар</td>
-        <td class="table__cell table__cell--static">
+        <td class="table__cell">Повар</td>
+        <td class="table__cell">
           <div class="photo__wrapper photo__wrapper--small">
             <img
               class="photo"
@@ -56,7 +56,7 @@
             />
           </div>
         </td>
-        <td class="table__cell table__cell--static">Работает</td>
+        <td class="table__cell table__cell--interactive" id="worker-status">Работает</td>
       </tr>
     </tbody>
   </table>
