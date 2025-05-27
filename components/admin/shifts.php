@@ -1,6 +1,38 @@
+<?php
+require_once '../../php-modules/connect-db.php';
+
+try {
+
+  $query = "
+        SELECT 
+            s.id,
+            s.start_time,
+            s.end_time,
+            s.is_open,
+GROUP_CONCAT(
+    CONCAT(u.last_name, ' ', LEFT(u.first_name, 1), '.') 
+    SEPARATOR ', '
+) AS workers
+        FROM shifts s
+        LEFT JOIN shift_assignments sa ON s.id = sa.shift_id
+        LEFT JOIN users u ON sa.user_id = u.id
+        GROUP BY s.id
+        ORDER BY s.start_time DESC
+    ";
+
+  $stmt = $conn->prepare($query);
+  $stmt->execute();
+  $shifts = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+} catch (PDOException $e) {
+  echo "Ошибка: " . $e->getMessage();
+  exit;
+}
+?>
+
 <h1 class="content__title">Админ-панель</h1>
 <div class="table__outer">
-  <button class="table__button" id="add-shift-button">
+  <button class="table__button" id="add-shift-button" data-modal="components/admin/add-shift-form.php">
     <svg class="table__add-icon" width="30" height="30" viewBox="0 0 40 41" fill="none"
       xmlns="http://www.w3.org/2000/svg">
       <g clip-path="url(#clip0_150_374)">
@@ -27,19 +59,35 @@
       </tr>
     </thead>
     <tbody class="table__body">
-      <tr class="table__row">
-        <td class="table__cell table__cell--dynamic">Виноградов К. С. (Повар)</td>
-        <td class="table__cell table__cell--interactive">
-          23.05.2025 (10:00&ndash;18:00)
-        </td>
-        <td class="table__cell">Закрыта</td>
-      </tr>
-      <tr class="table__row">
-        <td class="table__cell table__cell--dynamic table__cell--interactive" id="workers-2">Виноградов К. С. (Официант)
-        </td>
-        <td class="table__cell table__cell--interactive" id="shift-2">24.05.2025 (10:00&ndash;18:00)</td>
-        <td class="table__cell table__cell--interactive" id="status-2">Открыта</td>
-      </tr>
+      <?php foreach ($shifts as $shift): ?>
+        <?php
+
+        $start = new DateTime($shift['start_time']);
+        $end = new DateTime($shift['end_time']);
+        $date = $start->format('d.m.Y');
+        $timeRange = $start->format('H:i') . '&ndash;' . $end->format('H:i');
+        $status = $shift['is_open'] ? 'Открыта' : 'Закрыта';
+        $statusClass = $shift['is_open'] ? 'table__cell--open' : 'table__cell--closed';
+        ?>
+
+        <tr class="table__row">
+          <td class="table__cell table__cell--dynamic">
+            <?= htmlspecialchars($shift['workers'] ?? 'Нет данных') ?>
+          </td>
+          <td class="table__cell table__cell--interactive">
+            <?= $date ?> (<?= $timeRange ?>)
+          </td>
+          <td class="table__cell <?= $statusClass ?>">
+            <?= $status ?>
+          </td>
+        </tr>
+      <?php endforeach; ?>
+
+      <?php if (empty($shifts)): ?>
+        <tr class="table__row">
+          <td colspan="3" class="table__cell">Нет данных о сменах</td>
+        </tr>
+      <?php endif; ?>
     </tbody>
   </table>
 </div>

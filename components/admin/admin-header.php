@@ -71,12 +71,29 @@
     <nav class="header__nav" aria-label="Основная навигация">
       <ul class="header__list">
         <li class="header__list-item">
-          <button class="header__button header__button--current" id="shifts">Смены</button>
+          <button class="header__button header__button--current" id="shifts"
+            data-component="components/admin/shifts.php">Смены</button>
         </li>
         <li class="header__list-item">
-          <button class="header__button" id="workers">Работники</button>
+          <button class="header__button" id="workers" data-component="components/admin/workers.php">Работники</button>
         </li>
       </ul>
     </nav>
+    <div class="header__user-panel">
+      <?php if (isset($_SESSION['user'])): ?>
+        <div class="header__user-info">
+          <span class="header__user-name">
+            <?= htmlspecialchars($_SESSION['user']['full_name'] ?? 'Администратор') ?>
+          </span>
+          <a href="php-modules/logout.php" class="header__logout-button">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path
+                d="M15 3H19C20.1046 3 21 3.89543 21 5V19C21 20.1046 20.1046 21 19 21H15M10 17L15 12M15 12L10 7M15 12H3"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </a>
+        </div>
+      <?php endif; ?>
+    </div>
   </div>
 </header>

@@ -132,6 +132,33 @@ body {
     padding: 40px 224px;
 }
 
+.form__error {
+    position: absolute;
+    top: 80px;
+    color: var(--primary-text-color);
+    z-index: 50;
+}
+
+/* Стили для мультиселекта */
+.select__wrapper {
+  position: relative;
+  min-height: 40px;
+}
+
+.form__select[multiple] {
+  height: 120px;
+  padding-right: 30px;
+}
+
+.form__select[multiple] option {
+  padding: 8px;
+  border-bottom: 1px solid #eee;
+}
+
+.form__select[multiple] option:hover {
+  background: #f8f9fa;
+}
+
 .form__columns-wrapper {
     display: flex;
     width: 100%;
@@ -345,7 +372,6 @@ select {
     height: 100%;
     border-radius: 8px;
     object-fit: cover;
-    border: 2px solid var(--secondary-text-color);
 }
 
 .photo__wrapper {
@@ -411,6 +437,42 @@ select {
     background-color: var(--primary-background-color);
 }
 
+/* Стили для панели пользователя */
+.header__user-panel {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.header__user-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.header__user-name {
+    font-weight: 500;
+    color: #2c3e50;
+}
+
+.header__logout-button {
+    padding: 8px;
+    border-radius: 6px;
+    transition: background-color 0.2s;
+    color: #e74c3c;
+}
+
+.header__logout-button:hover {
+    background-color: rgba(231, 76, 60, 0.1);
+}
+
+.header__logout-button svg {
+    display: block;
+    width: 24px;
+    height: 24px;
+}
+
 .logo__svg {
     color: var(--logo-primary-color);
     height: 95%;
@@ -436,7 +498,7 @@ select {
     border-top: solid var(--logo-primary-color) 2px;
     padding: 15px 20px;
     text-align: center;
-    width: min-content;
+    width: max-content;
 }
 
 .table__cell--static {}
@@ -457,12 +519,12 @@ select {
 .table__row {}
 
 .table__row--interactive {
+    cursor: pointer;
     transition: background-color ease 200ms;
 }
 
 .table__row--interactive:hover {
     background-color: var(--primary-background-color);
-    cursor: pointer;
 }
 
 .table__cell--interactive:hover {
@@ -517,4 +579,32 @@ select {
 
 .cross-icon:hover {
     color: var(--logo-primary-color);
+}
+
+.table__cell--active {
+  color: #27ae60;
+  font-weight: 500;
+}
+
+.table__cell--inactive {
+  color: #e74c3c;
+  font-weight: 500;
+}
+
+.photo__wrapper--small {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+.photo__wrapper--small .photo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.table__row--inactive {
+    cursor: not-allowed;
+    background-color: var(--primary-background-color);
 }
