@@ -1,5 +1,9 @@
 <?php
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
 $title = "Tortotoro: Официант";
+session_start();
 ?>
 
 <!DOCTYPE html>
@@ -15,6 +19,12 @@ $title = "Tortotoro: Официант";
 <body class="page">
   <?php require $_SERVER['DOCUMENT_ROOT'] . '/Tortotoro/components/waiter/waiter-header.php' ?>
   <main class="content">
+    <?php if (isset($_SESSION['shift_error'])): ?>
+      <div class="form__error"><?= htmlspecialchars($_SESSION['shift_error']) ?></div>
+      <?php unset($_SESSION['shift_error']); endif; ?>
+    <?php if (isset($_SESSION['reg_error'])): ?>
+      <div class="form__error"><?= htmlspecialchars($_SESSION['reg_error']) ?></div>
+      <?php unset($_SESSION['reg_error']); endif; ?>
     <div class="content__loading" id="loading-box"></div>
     <div class="content__modal content__modal--inactive" id="modal-window-content"></div>
     <div class="content__inner content__inner--filled container" id="component-box"></div>

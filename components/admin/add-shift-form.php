@@ -20,11 +20,6 @@
     </div>
     <div class="form__input-wrapper">
       <div class="select__wrapper">
-        <svg class="select__arrow-icon" width="14" height="11" viewBox="0 0 14 11" fill="none"
-          xmlns="http://www.w3.org/2000/svg">
-          <path d="M1.5 1.5L7 9.5L12.5 1.5" stroke="#D1D1D1" stroke-width="2" stroke-linecap="round"
-            stroke-linejoin="round" />
-        </svg>
         <select class="form__select select" name="workers[]" id="select-worker" multiple required>
         </select>
       </div>

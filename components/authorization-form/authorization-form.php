@@ -15,6 +15,6 @@
       </div>
     </div>
   </div>
-  <input name="csrf_token" value="<?= $_SESSION['csrf_token'] ?? '' ?>">
+  <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?? '' ?>">
   <button class="form__button" type="submit">Войти</button>
 </form>

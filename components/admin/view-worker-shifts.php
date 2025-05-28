@@ -66,7 +66,6 @@ $position = $stmt->fetchColumn();
             <tr class="table__row">
                 <th class="table__cell table__cell--head">Дата</th>
                 <th class="table__cell table__cell--head">Время</th>
-                <th class="table__cell table__cell--head">Коллеги</th>
                 <th class="table__cell table__cell--head">Статус</th>
             </tr>
         </thead>
@@ -77,11 +76,11 @@ $position = $stmt->fetchColumn();
                 $end = new DateTime($shift['end_time']);
                 $status = $shift['is_open'] ? 'Открыта' : 'Закрыта';
                 $statusClass = $shift['is_open'] ? 'table__cell--open' : 'table__cell--closed';
+                $date = $start->format('d.m.Y');
                 ?>
                 <tr class="table__row">
                     <td class="table__cell"><?= $start->format('d.m.Y') ?></td>
-                    <td class="table__cell"><?= $start->format('H:i') ?>–<?= $end->format('H:i') ?></td>
-                    <td class="table__cell"><?= htmlspecialchars($shift['workers']) ?></td>
+                    <td class="table__cell"><?= $date ?> (<?= $start->format('H:i') ?>–<?= $end->format('H:i') ?>)</td>
                     <td class="table__cell <?= $statusClass ?>"><?= $status ?></td>
                 </tr>
             <?php endforeach; ?>

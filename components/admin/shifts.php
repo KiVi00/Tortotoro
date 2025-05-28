@@ -32,7 +32,7 @@ GROUP_CONCAT(
 
 <h1 class="content__title">Админ-панель</h1>
 <div class="table__outer">
-  <button class="table__button" id="add-shift-button" data-modal="components/admin/add-shift-form.php">
+  <button class="table__button" id="add-shift-button" data-modal="components/admin/add-shift-form.php" data-refresh="shifts">
     <svg class="table__add-icon" width="30" height="30" viewBox="0 0 40 41" fill="none"
       xmlns="http://www.w3.org/2000/svg">
       <g clip-path="url(#clip0_150_374)">
@@ -61,7 +61,6 @@ GROUP_CONCAT(
     <tbody class="table__body">
       <?php foreach ($shifts as $shift): ?>
         <?php
-
         $start = new DateTime($shift['start_time']);
         $end = new DateTime($shift['end_time']);
         $date = $start->format('d.m.Y');
@@ -69,25 +68,22 @@ GROUP_CONCAT(
         $status = $shift['is_open'] ? 'Открыта' : 'Закрыта';
         $statusClass = $shift['is_open'] ? 'table__cell--open' : 'table__cell--closed';
         ?>
-
         <tr class="table__row">
-          <td class="table__cell table__cell--dynamic">
+          <td class="table__cell table__cell--dynamic table__cell--interactive" data-shift-id="<?= $shift['id'] ?>"
+            data-is-open="<?= $shift['is_open'] ?>" data-modal="components/admin/edit-shift-workers-form.php" data-refresh="shifts">
             <?= htmlspecialchars($shift['workers'] ?? 'Нет данных') ?>
           </td>
-          <td class="table__cell table__cell--interactive">
+          </td>
+          <td class="table__cell table__cell--interactive" data-shift-id="<?= $shift['id'] ?>"
+            data-modal="components/admin/view-shift-orders.php" data-refresh="shifts">
             <?= $date ?> (<?= $timeRange ?>)
           </td>
-          <td class="table__cell <?= $statusClass ?>">
+          <td class="table__cell <?= $statusClass ?>" data-shift-id="<?= $shift['id'] ?>"
+            data-is-open="<?= $shift['is_open'] ?>" data-modal="components/admin/close-shift-confirm.php" data-refresh="shifts">
             <?= $status ?>
           </td>
         </tr>
       <?php endforeach; ?>
-
-      <?php if (empty($shifts)): ?>
-        <tr class="table__row">
-          <td colspan="3" class="table__cell">Нет данных о сменах</td>
-        </tr>
-      <?php endif; ?>
     </tbody>
   </table>
 </div>

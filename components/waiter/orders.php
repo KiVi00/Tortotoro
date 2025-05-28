@@ -1,6 +1,63 @@
+<?php
+session_start();
+require_once __DIR__ . '/../../php-modules/connect-db.php';
+
+try {
+    $currentUserId = $_SESSION['user']['id'];
+
+    // Получаем текущую открытую смену пользователя
+    $shiftQuery = "
+        SELECT s.id 
+        FROM shifts s
+        JOIN shift_assignments sa ON s.id = sa.shift_id
+        WHERE sa.user_id = :user_id
+          AND s.is_open = 1
+        LIMIT 1
+    ";
+
+    $shiftStmt = $conn->prepare($shiftQuery);
+    $shiftStmt->bindParam(':user_id', $currentUserId, PDO::PARAM_INT);
+    $shiftStmt->execute();
+    $shift = $shiftStmt->fetch(PDO::FETCH_ASSOC);
+
+    if (!$shift) {
+        $orders = [];
+    } else {
+        $shiftId = $shift['id'];
+
+        // Запрос для получения заказов текущей смены
+        $query = "
+        SELECT 
+            o.id,
+            SUM(oi.price * oi.quantity) AS total_price,
+            o.created_at,
+            os.name AS status,
+            GROUP_CONCAT(d.name SEPARATOR ', ') AS dish_names
+        FROM orders o
+        JOIN order_items oi ON o.id = oi.order_id
+        JOIN dishes d ON oi.dish_id = d.id
+        JOIN order_statuses os ON o.status_id = os.id
+        WHERE o.shift_id = :shift_id
+          AND o.waiter_id = :user_id
+        GROUP BY o.id
+        ORDER BY o.created_at DESC
+        ";
+
+        $stmt = $conn->prepare($query);
+        $stmt->bindParam(':shift_id', $shiftId, PDO::PARAM_INT);
+        $stmt->bindParam(':user_id', $currentUserId, PDO::PARAM_INT);
+        $stmt->execute();
+        $orders = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+} catch (PDOException $e) {
+    echo "Ошибка: " . $e->getMessage();
+    exit;
+}
+?>
+
 <h1 class="content__title">Панель официанта</h1>
 <div class="table__outer">
-    <button class="table__button" id="create-order-button">
+    <button class="table__button" id="create-order-button" data-modal="components/waiter/create-order-form.php">
         <svg class="table__add-icon" width="30" height="30" viewBox="0 0 40 41" fill="none"
             xmlns="http://www.w3.org/2000/svg">
             <g clip-path="url(#clip0_150_374)">
@@ -28,38 +85,36 @@
             </tr>
         </thead>
         <tbody class="table__body">
-            <tr class="table__row table__row--interactive">
-                <td class="table__cell table__cell--dynamic">Гречка с мясом, суп с овощами</td>
-                <td class="table__cell">735&#8381;</td>
-                <td class="table__cell">
-                    18:24
-                </td>
-                <td class="table__cell">Оплачен</td>
-            </tr>
-            <tr class="table__row table__row--interactive">
-                <td class="table__cell table__cell--dynamic">Бисквитный торт, шоколадный десерт</td>
-                <td class="table__cell">822&#8381;</td>
-                <td class="table__cell">20:24</td>
-                <td class="table__cell">Отменен</td>
-            </tr>
-            <tr class="table__row table__row--interactive">
-                <td class="table__cell table__cell--dynamic">Бисквитный торт, шоколадный десерт</td>
-                <td class="table__cell">822&#8381;</td>
-                <td class="table__cell">21:34</td>
-                <td class="table__cell table__cell--interactive" id="order-status-n">Готов</td>
-            </tr>
-            <tr class="table__row table__row--interactive">
-                <td class="table__cell table__cell--dynamic">Бисквитный торт, шоколадный десерт</td>
-                <td class="table__cell">822&#8381;</td>
-                <td class="table__cell">21:50</td>
-                <td class="table__cell table__cell--interactive" id="order-status-n2">Готовится</td>
-            </tr>
-            <tr class="table__row table__row--interactive">
-                <td class="table__cell table__cell--dynamic">Бисквитный торт, шоколадный десерт</td>
-                <td class="table__cell">822&#8381;</td>
-                <td class="table__cell">21:59</td>
-                <td class="table__cell table__cell--interactive" id="order-status-n3">Принят</td>
-            </tr>
+            <?php if (empty($orders)): ?>
+                <tr class="table__row">
+                    <td colspan="4" class="table__cell">Нет заказов за текущую смену</td>
+                </tr>
+            <?php else: ?>
+                <?php foreach ($orders as $order): ?>
+                    <?php
+                    $createdAt = new DateTime($order['created_at']);
+                    $time = $createdAt->format('H:i'); ?>
+                    <tr class="table__row table__row--interactive">
+                        <td class="table__cell table__cell--dynamic">
+                            <?= htmlspecialchars($order['dish_names']) ?>
+                        </td>
+                        <td class="table__cell">
+                            <?= number_format($order['total_price'], 0, '', ' ') ?>&#8381;
+                        </td>
+                        <!-- Добавить data-order-id и data-modal -->
+                        <td class="table__cell table__cell--interactive" data-order-id="<?= $order['id'] ?>"
+                            data-modal="components/waiter/view-order-form.php">
+                            <?= $time ?>
+                        </td>
+                        <td class="table__cell <?php if ($order['status'] === 'Принят' || $order['status'] === 'Готовится' || $order['status'] === 'Готов') {
+                            echo 'table__cell--interactive';
+                        } ?>" data-order-id="<?= $order['id'] ?>"
+                            data-modal="components/waiter/change-order-status.php">
+                            <?= htmlspecialchars($order['status']) ?>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+            <?php endif; ?>
         </tbody>
     </table>
 </div>

@@ -43,7 +43,7 @@
           </select>
         </div>
       </div>
-      <input name="csrf_token" value="<?= $_SESSION['csrf_token'] ?? '' ?>">
+      <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?? '' ?>">
       <button class="form__button" type="submit">Зарегистрировать</button>
     </div>
     <div class="form__photo-group">

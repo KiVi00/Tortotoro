@@ -26,7 +26,7 @@ try {
 
 <h1 class="content__title">Админ-панель</h1>
 <div class="table__outer">
-  <button class="table__button" id="add-worker-button" data-modal="components/admin/registration-form.php">
+  <button class="table__button" id="add-worker-button" data-modal="components/admin/registration-form.php" data-refresh="workers">
     <svg class="table__add-icon" width="30" height="30" viewBox="0 0 40 41" fill="none"
       xmlns="http://www.w3.org/2000/svg">
       <g clip-path="url(#clip0_150_374)">
@@ -41,50 +41,51 @@ try {
       </defs>
     </svg>
   </button>
-  <table class="table">
-    <caption class="table__heading">
-      <h2 class="secondary-heading">Работники</h2>
-    </caption>
-    <thead class="table__head">
-      <tr class="table__row">
-        <th class="table__cell table__cell--head">ФИО</th>
-        <th class="table__cell table__cell--head">Должность</th>
-        <th class="table__cell table__cell--head">Фото</th>
-        <th class="table__cell table__cell--head">Статус</th>
-      </tr>
-    </thead>
-    <tbody class="table__body">
-      <?php foreach ($workers as $worker): ?>
-        <?php
-        $status = $worker['is_active'] ? 'Работает' : 'Уволен';
-        $statusClass = $worker['is_active'] ? 'table__cell--active' : 'table__cell--inactive';
-        $photoPath = $worker['photo_file'] ?: 'assets/images/default-avatar.jpg';
-        ?>
-        <tr class="table__row table__row--interactive <?= $worker['is_active'] ? '' : 'table__row--inactive' ?>">
-          <td class="table__cell" data-worker-id="<?= $worker['id'] ?>" data-modal="components/admin/view-worker-shifts.php">
-            <?= htmlspecialchars($worker['full_name']) ?>
-          </td>
-          <td class="table__cell">
-            <?= htmlspecialchars($worker['position']) ?>
-          </td>
-          <td class="table__cell">
-            <div class="photo__wrapper photo__wrapper--small">
-              <img class="photo" src="<?= htmlspecialchars($photoPath) ?>"
-                alt="Фото работника <?= htmlspecialchars($worker['full_name']) ?>">
-            </div>
-          </td>
-          <td class="table__cell <?= $statusClass ?>" data-worker-id="<?= $worker['id'] ?>" data-action="dismiss"
-            data-modal="components/admin/dismiss-worker-form.php">
-            <?= $status ?>
-          </td>
-        </tr>
-      <?php endforeach; ?>
-
-      <?php if (empty($workers)): ?>
+    <table class="table">
+      <caption class="table__heading">
+        <h2 class="secondary-heading">Работники</h2>
+      </caption>
+      <thead class="table__head">
         <tr class="table__row">
-          <td colspan="4" class="table__cell">Нет данных о работниках</td>
+          <th class="table__cell table__cell--head">ФИО</th>
+          <th class="table__cell table__cell--head">Должность</th>
+          <th class="table__cell table__cell--head">Фото</th>
+          <th class="table__cell table__cell--head">Статус</th>
         </tr>
-      <?php endif; ?>
-    </tbody>
-  </table>
+      </thead>
+      <tbody class="table__body">
+        <?php foreach ($workers as $worker): ?>
+          <?php
+          $status = $worker['is_active'] ? 'Работает' : 'Уволен';
+          $statusClass = $worker['is_active'] ? 'table__cell--active' : 'table__cell--inactive';
+          $photoPath = $worker['photo_file'] ?: 'assets/images/default-avatar.jpg';
+          ?>
+          <tr class="table__row table__row--interactive <?= $worker['is_active'] ? '' : 'table__row--inactive' ?>">
+            <td class="table__cell" data-worker-id="<?= $worker['id'] ?>"
+              data-modal="components/admin/view-worker-shifts.php" data-refresh="workers">
+              <?= htmlspecialchars($worker['full_name']) ?>
+            </td>
+            <td class="table__cell" >
+              <?= htmlspecialchars($worker['position']) ?>
+            </td>
+            <td class="table__cell">
+              <div class="photo__wrapper photo__wrapper--small">
+                <img class="photo" src="<?= htmlspecialchars($photoPath) ?>"
+                  alt="Фото работника <?= htmlspecialchars($worker['full_name']) ?>">
+              </div>
+            </td>
+            <td class="table__cell <?= $worker['is_active'] ? 'table__cell--interactive' : '' ?> <?= $statusClass ?>" data-worker-id="<?= $worker['id'] ?>" data-action="dismiss"
+              data-modal="components/admin/dismiss-worker-form.php" data-refresh="workers">
+              <?= $status ?>
+            </td>
+          </tr>
+        <?php endforeach; ?>
+
+        <?php if (empty($workers)): ?>
+          <tr class="table__row">
+            <td colspan="4" class="table__cell">Нет данных о работниках</td>
+          </tr>
+        <?php endif; ?>
+      </tbody>
+    </table>
 </div>
