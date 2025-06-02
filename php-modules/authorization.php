@@ -10,7 +10,6 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     exit;
 }
 
-// CSRF-защита
 if (!isset($_POST['csrf_token']) || $_POST['csrf_token'] !== ($_SESSION['csrf_token'] ?? '')) {
     $_SESSION['error'] = 'Ошибка безопасности сессии';
     header('Location: /Tortotoro/index.php');

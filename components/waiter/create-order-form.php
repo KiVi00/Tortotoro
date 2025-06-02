@@ -47,16 +47,11 @@
       </div>
       <button type="button" class="form__button" id="add-dish-button">Добавить блюдо</button>
     </div>
-
   </div>
-
-  <!-- Общая сумма -->
   <div class="form__total">
     <span>Итого:</span>
     <span id="total-amount">0&#8381;</span>
   </div>
-
-  <!-- Блок для отображения ошибок -->
   <div id="form-errors" class="form__errors" style="color: red; margin-bottom: 15px; display: none;"></div>
     <button type="submit" class="form__button">Создать заказ</button>
 </form>

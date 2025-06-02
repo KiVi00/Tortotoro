@@ -1,10 +1,6 @@
 <?php
 session_start();
 
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
-
 if (!isset($_SESSION['user'])) {
     echo json_encode(['error' => 'Требуется авторизация']);
     exit;
@@ -12,20 +8,16 @@ if (!isset($_SESSION['user'])) {
 
 require_once __DIR__ . '/connect-db.php';
 
-// Получаем данные из формы
 $dishesData = $_POST['dishes'] ?? [];
 
-// Проверяем наличие блюд
 if (empty($dishesData)) {
     echo json_encode(['error' => 'Не выбрано ни одного блюда']);
     exit;
 }
 
 try {
-    // Начинаем транзакцию
     $conn->beginTransaction();
     
-    // Получаем текущую смену пользователя
     $userId = $_SESSION['user']['id'];
     $stmt = $conn->prepare("
         SELECT shift_id 
@@ -43,7 +35,6 @@ try {
     }
     $shiftId = $shift['shift_id'];
     
-    // Создаем заказ
     $stmt = $conn->prepare("
         INSERT INTO orders (shift_id, waiter_id, status_id, created_at)
         VALUES (:shift_id, :waiter_id, 1, NOW())
@@ -54,16 +45,13 @@ try {
     ]);
     $orderId = $conn->lastInsertId();
     
-    // Добавляем блюда в заказ
     $stmt = $conn->prepare("
         INSERT INTO order_items (order_id, dish_id, quantity, price)
         VALUES (:order_id, :dish_id, :quantity, :price)
     ");
     
-    // Получаем цены блюд
     $dishIds = array_keys($dishesData);
     
-    // Если нет блюд для получения цен
     if (empty($dishIds)) {
         throw new Exception("Нет ID блюд для получения цен");
     }
@@ -84,7 +72,6 @@ try {
         $price = $prices[$dishId];
         $quantity = (int)$dish['quantity'];
         
-        // Пропускаем нулевые количества
         if ($quantity <= 0) {
             continue;
         }
@@ -100,7 +87,6 @@ try {
         $hasItems = true;
     }
     
-    // Если не было добавлено ни одного действительного блюда
     if (!$hasItems) {
         throw new Exception("Все блюда имеют нулевое количество");
     }
@@ -121,6 +107,4 @@ try {
     }
     http_response_code(500);
     echo json_encode(['error' => $e->getMessage()]);
-
-    
 }

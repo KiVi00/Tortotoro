@@ -9,7 +9,6 @@ if (!$orderId) {
 }
 
 try {
-    // Получаем информацию о заказе
     $orderStmt = $conn->prepare("
         SELECT 
             o.id,
@@ -28,9 +27,8 @@ try {
         die('Заказ не найден');
     }
 
-    // Определяем следующий доступный статус для повара
     $nextStatus = null;
-    if ($order['status_id'] == 1) { // Текущий статус "Принят"
+    if ($order['status_id'] == 1) {
         $statusStmt = $conn->prepare("
             SELECT id, name 
             FROM order_statuses 
@@ -38,7 +36,7 @@ try {
         ");
         $statusStmt->execute();
         $nextStatus = $statusStmt->fetch(PDO::FETCH_ASSOC);
-    } elseif ($order['status_id'] == 2) { // Текущий статус "Готовится"
+    } elseif ($order['status_id'] == 2) {
         $statusStmt = $conn->prepare("
             SELECT id, name 
             FROM order_statuses 
